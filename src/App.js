@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import AddUserForm from "./AddUserForm";
+import UserList from "./UserList";
+import EditUserModal from "./EditUserModal";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [users, setUsers] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const addUser = (user) => {
+        // Generate a unique ID for the user
+        user.id = Date.now().toString();
+        setUsers([...users, user]);
+    };
+
+    const deleteUser = (userId) => {
+        setUsers(users.filter((user) => user.id !== userId));
+    };
+
+    const updateUser = (updatedUser) => {
+        setUsers(
+            users.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+        );
+    };
+
+    const openModal = (user) => {
+        setSelectedUser(user);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setSelectedUser(null);
+        setShowModal(false);
+    };
+    const editUser = (user) => {
+        setSelectedUser(user);
+        setShowModal(true);
+    };
+    return ( <
+            div >
+            <
+            h1 > User Management App < /h1> <AddUserForm addUser={addUser} / > { " " } <
+            UserList users = { users }
+            deleteUser = { deleteUser }
+            editUser = { editUser }
+            openModal = { openModal }
+            />{" "} {
+            showModal && ( <
+                EditUserModal user = { selectedUser }
+                updateUser = { updateUser }
+                closeModal = { closeModal }
+                />
+            )
+        } { " " } <
+        /div>
+);
+};
 
 export default App;
